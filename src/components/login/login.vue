@@ -5,7 +5,7 @@
         <el-input v-model="userForm.username"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="userForm.password"></el-input>
+        <el-input v-model="userForm.password" type="password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="login-btn" @click="login">立即登录</el-button>
@@ -32,8 +32,15 @@ export default {
       const res = await axios.post('http://localhost:8888/api/private/v1/login', this.userForm);
       const data = res.data;
       if (data.meta.status === 200) {
+        // window.console.log(JSON.stringify(data.data));
+        // 将token 持久化存储起来
+        window.localStorage.setItem('admin-token', JSON.stringify(data.data));
         this.$router.push({
           name: 'home',
+        });
+        this.$message({
+          type: 'success',
+          message: '登陆成功',
         });
       }
     },
