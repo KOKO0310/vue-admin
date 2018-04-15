@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from '@/components/login/login'; // @ 是 src 路径的别名，webpack 配置的
 import Home from '@/components/home/home';
+import UserList from '@/components/user-list/user-list';
 
 Vue.use(Router);
 
@@ -16,6 +17,13 @@ const router = new Router({
       name: 'home',
       path: '/',
       component: Home,
+      children: [
+        {
+          name: 'user-list',
+          path: '/users',
+          component: UserList,
+        },
+      ],
     },
   ],
 });
