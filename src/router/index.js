@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Login from '@/components/login/login'; // @ 是 src 路径的别名，webpack 配置的
 import Home from '@/components/home/home';
 import UserList from '@/components/user-list/user-list';
+import { getUserInfo } from '@/assets/js/auth';
 
 Vue.use(Router);
 
@@ -39,7 +40,7 @@ router.beforeEach((to, from, next) => {
   if (to.name === 'login') {
     next();
   } else {
-    const token = window.localStorage.getItem('admin-token');
+    const token = getUserInfo();
     if (!token) {
       next({
         name: 'login',

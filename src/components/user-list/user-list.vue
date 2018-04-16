@@ -40,43 +40,49 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="4"
-      :page-sizes="[1, 2, 3, 3]"
-      :page-size="1"
+      :current-page.sync="currentPage"
+      :page-sizes="[1, 2, 3, 4]"
+      :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
+      :total="total">
     </el-pagination>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   async created() {
-    const {token} = JSON.parse(window.localStorage.getItem('admin-token'));
-    const res = await axios.get('http://localhost:8888/api/private/v1/users',{
-      headers: {
-        Authorization: token,
-      },
-      params: {
-        pagenum: 1,
-        pagesize: 5,
-      },
-    });
-    this.tableData = res.data.data.users;
+    this.getUserlist(1);
   },
   data() {
     return {
       tableData: [],
       searchText: '',
+      total: 1,
+      currentPage: 1,
+      pageSize: 2,
     };
   },
   methods: {
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      //切换pagesize的时候，重新渲染数据，从第1页显示
+      this.getUserlist(1,val);
+      this.currentPage = 1;
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.getUserlist(val);
+    },
+    async getUserlist(page) {
+      const res = await this.$http.get('/users', {
+        params: {
+          pagenum: page,
+          pagesize: this.pageSize,
+        },
+      });
+      const { users, total } = res.data.data;
+      this.tableData = users;
+      this.total = total;
     },
   },
 };

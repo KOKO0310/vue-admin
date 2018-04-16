@@ -80,18 +80,20 @@
 </template>
 
 <script>
+import { removeUserInfo } from '@/assets/js/auth';
+
 export default {
   data() {
     return {};
   },
   methods: {
     logout() {
-      this.$confirm('are you sure?', '退出提示', {
+      this.$confirm('确定退出吗?', '退出提示', {
         confirmButtonText: 'yes',
         cancelButtonText: 'no',
         type: 'warning',
       }).then(() => {
-        window.localStorage.removeItem('admin-token');
+        removeUserInfo();
         this.$router.push({
           name: 'login',
         });
@@ -105,12 +107,6 @@ export default {
           message: '取消退出',
         });
       });
-    },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
     },
   },
 };
