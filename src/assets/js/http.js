@@ -23,7 +23,7 @@ const httpPlugin = {};
 //
 //   Vue.use(httpPlugin) 会来调用 install 方法
 
-httpPlugin.install = function (Vue, options) {
+httpPlugin.install = function abc(Vue) {
   Vue.prototype.$http = http;
 };
 
