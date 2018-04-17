@@ -1,4 +1,5 @@
 <template>
+<div>
   <el-row>
     <el-col :span="24">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="list-wrap">
@@ -8,12 +9,56 @@
       </el-breadcrumb>
     </el-col>
   </el-row>
+  <el-table
+    ref="singleTable"
+    :data="tableData"
+    highlight-current-row
+    style="width: 100%">
+    <el-table-column
+      type="index"
+      width="50">
+    </el-table-column>
+    <el-table-column
+      property="authName"
+      label="权限名称"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      property="path"
+      label="路径"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      label="等级">
+      <template slot-scope="scope">
+        <span v-if="scope.row.level === '0'">一级</span>
+        <span v-else-if="scope.row.level === '1'">二级</span>
+        <span v-else-if="scope.row.level === '2'">三级</span>
+      </template>
+    </el-table-column>
+  </el-table>
+</div>
 </template>
 
 <script>
 export default {
+  created() {
+    this.loadRigths();
+  },
   data() {
+    return {
+      tableData: [{
 
+      }],
+    };
+  },
+  methods: {
+    async loadRigths() {
+      const res = await this.$http.get('rights/list');
+      if (res.data.meta.status === 200) {
+        this.tableData = res.data.data;
+      }
+    },
   },
 };
 </script>
