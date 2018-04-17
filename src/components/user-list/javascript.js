@@ -9,11 +9,17 @@ export default {
       total: 1,
       currentPage: 1,
       pageSize: 2,
-      dialogFormVisible: false,
+      dialogFormVisible: false, // 添加用户弹框
+      dialogEditFormVisible: false, // 编辑用户弹框
       userForm: {
         username: '',
         password: '',
         email: '',
+        mobile: '',
+      },
+      editUserForm: {
+        username: '',
+        password: '',
         mobile: '',
       },
       addUserFormRules: {
@@ -67,8 +73,26 @@ export default {
         }
       }
     },
-    handleEdit(index, row) {
-      console.log(index, row);
+    async handleEdit(row) {
+      this.dialogEditFormVisible = true;
+      const id = row.id;
+      console.log(id);
+      const res = await this.$http.get(`users/${id}`);
+      if (res.data.meta.status === 200) {
+        this.editUserForm = res.data.data;
+      }
+    },
+    async handleEditForm(id) {
+      const res = await this.$http.put(`users/${id}`, this.editUserForm);
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '修改成功',
+        });
+
+        this.dialogEditFormVisible = false;
+        this.getUserlist(this.currentPage);
+      }
     },
     handleDelete(row) {
       const id = row.id;
