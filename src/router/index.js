@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import Login from '@/components/login/login'; // @ 是 src 路径的别名，webpack 配置的
 import Home from '@/components/home/home';
 import UserList from '@/components/user-list/user-list';
+import RoleList from '@/components/role-list/role-list';
+import RightsList from '@/components/rights-list/rights-list';
 import { getUserInfo } from '@/assets/js/auth';
 
 Vue.use(Router);
@@ -23,6 +25,16 @@ const router = new Router({
           name: 'user-list',
           path: '/users',
           component: UserList,
+        },
+        {
+          name: 'role-list',
+          path: '/roles',
+          component: RoleList,
+        },
+        {
+          name: 'rights-list',
+          path: '/rights',
+          component: RightsList,
         },
       ],
     },
