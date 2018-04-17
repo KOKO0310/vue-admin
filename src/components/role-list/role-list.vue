@@ -1,14 +1,3 @@
-<template>
-  <p>角色列表</p>
-</template>
-<script>
-export default {
-  data() {
-
-  },
-};
-</script>
-<style>
-
-</style>
-
+<template src="./template.html"></template>
+<script src="./script.js"></script>
+<style src="./style.css"></style>
