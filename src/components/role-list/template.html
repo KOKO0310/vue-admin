@@ -8,7 +8,7 @@
       </el-breadcrumb>
     </el-col>
   </el-row>
-  <el-button type="success" plain>添加角色</el-button>
+  <el-button type="success" plain @click="dialogAddFormVisible=true">添加角色</el-button>
   <el-table
   :data="roleList"
   style="width: 100%">
@@ -68,8 +68,77 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.row)">编辑</el-button>
+          type="primary"
+          plain
+          @click="handleEditRole(scope.row)">编辑</el-button>
+        <el-button
+          size="mini"
+          type="danger"
+          plain
+          @click="handleDeleteRole(scope.row)">删除</el-button>
+        <el-button
+          size="mini"
+          type="warning"
+          plain
+          @click="handleEditRights(scope.row)">授权</el-button>
       </template>
     </el-table-column>
   </el-table>
+  <!-- 添加角色 -->
+  <el-dialog title="添加角色" :visible.sync="dialogAddFormVisible">
+    <el-form
+    :model="addRoleForm">
+      <el-form-item label="角色名称" label-width="120px ">
+        <el-input
+        v-model="addRoleForm.roleName"
+        auto-complete="off"
+        autofocus="true"></el-input>
+      </el-form-item>
+      <el-form-item label="描述" label-width="120px">
+        <el-input v-model="addRoleForm.roleDesc" auto-complete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogAddFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="handleAddRole">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- /添加角色 -->
+  <!-- 编辑角色 -->
+  <el-dialog title="编辑角色" :visible.sync="dialogEditFormVisible">
+    <el-form
+    :model="editRoleForm">
+      <el-form-item label="角色名称" label-width="120px ">
+        <el-input
+        v-model="editRoleForm.roleName"
+        auto-complete="off"
+        autofocus="true"></el-input>
+      </el-form-item>
+      <el-form-item label="描述" label-width="120px">
+        <el-input v-model="editRoleForm.roleDesc" auto-complete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogEditFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="handleEditRoleok(editRoleForm.roleId)">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- /编辑角色 -->
+  <!-- 授权列表 -->
+  <el-dialog title="授权角色" :visible.sync="editRightsListVisible">
+    <el-tree
+      :data="treeData"
+      show-checkbox
+      node-key="id"
+      ref="rightsTree"
+      default-expand-all
+      :default-checked-keys="treeCheckedKeys"
+      :props="treeProps">
+    </el-tree>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="editRightsListVisible = false">取 消</el-button>
+      <el-button type="primary" @click="handleEditRightsok">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- /授权列表 -->
 </div>
