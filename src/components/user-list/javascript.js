@@ -11,6 +11,7 @@ export default {
       pageSize: 2,
       dialogFormVisible: false, // 添加用户弹框
       dialogEditFormVisible: false, // 编辑用户弹框
+      userRoledialog: false, // 修改角色弹框
       userForm: {
         username: '',
         password: '',
@@ -37,6 +38,11 @@ export default {
           { required: true, message: '请输入手机号', trigger: 'blur' },
         ],
       },
+      userRoleForm: {
+        username: '',
+        rid: '',
+      },
+      rolesListForm: {},
     };
   },
   methods: {
@@ -138,6 +144,33 @@ export default {
       const { users, total } = res.data.data;
       this.tableData = users;
       this.total = total;
+    },
+    /**
+     * 给用户修改角色
+     */
+    async handleShowRole(user) {
+      // console.log(user);
+      this.userRoledialog = true;
+      const userRes = await this.$http.get(`users/${user.id}`);
+      const rolesRes = await this.$http.get('roles');
+      if (userRes.data.meta.status === 200 && rolesRes.data.meta.status === 200) {
+        this.userRoleForm = userRes.data.data;
+        this.rolesListForm = rolesRes.data.data;
+      }
+    },
+    async handleEditUserRole() {
+      const { id: userId, rid: roleId } = this.userRoleForm;
+      const res = await this.$http.put(`users/${userId}/role`, {
+        rid: roleId,
+      });
+      // console.log(res);
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '角色修改成功',
+        });
+        this.userRoledialog = false;
+      }
     },
   },
 };
