@@ -76,7 +76,6 @@ export default {
     async handleEdit(row) {
       this.dialogEditFormVisible = true;
       const id = row.id;
-      console.log(id);
       const res = await this.$http.get(`users/${id}`);
       if (res.data.meta.status === 200) {
         this.editUserForm = res.data.data;
@@ -96,7 +95,6 @@ export default {
     },
     handleDelete(row) {
       const id = row.id;
-      console.log(id);
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

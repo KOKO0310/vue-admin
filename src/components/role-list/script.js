@@ -18,7 +18,7 @@ export default {
         children: 'children',
         label: 'authName',
       },
-      currentRole: '',
+      currentRole: null,
       treeCheckedKeys: [],
       dialogAddFormVisible: false, // 添加角色弹框
       dialogEditFormVisible: false, // 编辑角色弹框
@@ -92,6 +92,9 @@ export default {
         });
       });
     },
+    /**
+     * 授权
+     */
     async handleEditRights(role) {
       this.currentRole = role;
       // console.log(user);
@@ -133,6 +136,25 @@ export default {
       }
       f(rightList);
       return arr;
+    },
+    /**
+     * 删除指定权限
+     */
+    async handleRemoveRight(role, right) {
+      // console.log(role, right);
+      const roleId = role.id;
+      const rightId = right.id;
+      const res = await this.$http.delete(`roles/${roleId}/rights/${rightId}`);
+      const { data } = res.data;
+      if (res.data.meta.status === 200) {
+        // res.data.data 就是删除某项权限后的最新的权限数据，重新赋值给role.children，会自动更新权限显示
+        // 角色的children 就是角色的权限列表数据，参见第104行和template.html中的leve1,2,3,循环输出的的时候leve1 in scope.children
+        role.children = data;
+        this.$message({
+          type: 'success',
+          message: '删除权限成功',
+        });
+      }
     },
   },
 };

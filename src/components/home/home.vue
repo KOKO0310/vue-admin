@@ -16,11 +16,11 @@
   </el-header>
   <el-container class="container">
     <el-aside class="aside" width="200px">
+      <!-- @open="handleOpen"
+      @close="handleClose" -->
       <el-menu default-active="1-4-1"
       class="el-menu-vertical-demo aside-menu"
       :router="true"
-      @open="handleOpen"
-      @close="handleClose"
       :unique-opened="true">
         <el-submenu index="1">
           <template slot="title">
@@ -37,7 +37,7 @@
             <span slot="title">权限管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1">角色列表</el-menu-item>
+            <el-menu-item index="/roles">角色列表</el-menu-item>
             <el-menu-item index="/rights">权限列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -108,12 +108,12 @@ export default {
         });
       });
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
+    // handleOpen(key, keyPath) {
+    //   console.log(key, keyPath);
+    // },
+    // handleClose(key, keyPath) {
+    //   console.log(key, keyPath);
+    // },
   },
 };
 </script>
