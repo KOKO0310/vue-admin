@@ -22,52 +22,17 @@
       class="el-menu-vertical-demo aside-menu"
       :router="true"
       :unique-opened="true">
-        <el-submenu index="1">
+        <el-submenu v-for="(level1Menu,index) in menuList"
+        :key="index"
+        :index="index.toString()">
           <template slot="title">
             <i class="el-icon-star-off"></i>
-            <span slot="title">用户管理</span>
+            <span slot="title">{{ level1Menu.authName }}</span>
           </template>
-          <el-menu-item-group>
-            <el-menu-item index="/users">用户列表</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-menu"></i>
-            <span slot="title">权限管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="/roles">角色列表</el-menu-item>
-            <el-menu-item index="/rights">权限列表</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-goods"></i>
-            <span slot="title">商品管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="3-1">商品列表</el-menu-item>
-            <el-menu-item index="3-2">商品分类</el-menu-item>
-            <el-menu-item index="3-3">商品参数</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="4">
-          <template slot="title">
-            <i class="el-icon-tickets"></i>
-            <span slot="title">订单管理</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="4-1">订单列表</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-        <el-submenu index="5">
-          <template slot="title">
-            <i class="el-icon-view"></i>
-            <span slot="title">数据统计</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="5-1">数据列表</el-menu-item>
+          <el-menu-item-group
+          v-for="(level2Menu,index) in level1Menu.children"
+          :key="index">
+            <el-menu-item :index="level2Menu.path">{{ level2Menu.authName }}</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
@@ -83,8 +48,13 @@
 import { removeUserInfo } from '@/assets/js/auth';
 
 export default {
+  created() {
+    this.loadMenu();
+  },
   data() {
-    return {};
+    return {
+      menuList: [],
+    };
   },
   methods: {
     logout() {
@@ -107,6 +77,13 @@ export default {
           message: '取消退出',
         });
       });
+    },
+    async loadMenu() {
+      const res = await this.$http.get('menus');
+      const { data, meta } = res.data;
+      if (meta.status === 200) {
+        this.menuList = data;
+      }
     },
     // handleOpen(key, keyPath) {
     //   console.log(key, keyPath);
