@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '@/router/index';
 import { getToken } from './auth';
 
 // 给axios设置一个基本url地址
@@ -14,6 +15,17 @@ http.interceptors.request.use((config) => {
   return config;
 }, error => Promise.reject(error));
 
+// 响应拦截器
+axios.interceptors.response.use((response) => {
+  const { meta } = response.date;
+  if (meta.status === 403) {
+    window.alert('你没有权限执行该操作！');
+  } else if (meta.status === 401) {
+    router.push({
+      name: 'login',
+    });
+  }
+}, error => Promise.reject(error));
 // 将上面的http设置添加给vue的实例，做成vue的插件
 
 const httpPlugin = {};
